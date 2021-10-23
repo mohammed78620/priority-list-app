@@ -61,7 +61,7 @@
           <td scope="row">{{task.name}}</td>
           <td>{{task.priority}}</td>
           <td >
-            <div class="text-center">
+            <div class="text-center" @click="editTask(index)">
               <span class="fa fa-pen"></span>
             </div>
           </td>
@@ -94,6 +94,8 @@ export default {
       task: '',
       priority:'',
       priority1:'',
+      editedTask: null,
+
       tasks: [
         {
           name: 'task 1',
@@ -122,13 +124,17 @@ export default {
   methods: {
     submitTask(){
       if(this.task.length === 0 || this.priority.length === 0) return;
-
-      this.tasks.push({
-        name: this.task,
-        priority: this.priority
-      })
-      this.task = '';
-      this.priority = '';
+      if(this.editedTask.length === null){
+        this.tasks.push({
+          name: this.task,
+          priority: this.priority
+        })
+        this.task = '';
+        this.priority = '';
+      }else{
+        this.tasks[this.editedTask].name = this.task
+        this.editedTask = null
+      }
     },
     deleteTask(index){
       this.tasks.splice(index, 1);
@@ -172,6 +178,10 @@ export default {
         this.flag2 = !this.flag2
       }
 
+    },
+    editTask(index){
+      this.task = this.tasks[index].name
+      this.editedTask = index
     }
   }
 }
